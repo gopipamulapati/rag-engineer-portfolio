@@ -1,0 +1,31 @@
+Northwind Analytics — API Rate Limits and SDK Reference
+
+Ingest API rate limits. Each tenant is rate limited to 5,000 events per
+second by default, enforced at the Ingest Gateway using a token bucket per
+tenant ID. Enterprise-tier tenants may request a higher limit, up to 50,000
+events per second, by contacting their account manager; the new limit takes
+effect within one business day once approved.
+
+Query API rate limits. Dashboard queries are limited to 120 requests per
+minute per user, and programmatic API access (via personal access tokens) is
+limited to 600 requests per minute per token. Exceeding the limit returns an
+HTTP 429 response with a Retry-After header.
+
+Official SDKs. Northwind Analytics publishes SDKs for JavaScript, Python, and
+Go. All SDKs batch events client-side and flush every 2 seconds or every 100
+events, whichever comes first, to reduce the number of HTTPS requests against
+the Ingest Gateway's rate limit. The JavaScript SDK additionally supports
+offline queuing using IndexedDB for browser environments with intermittent
+connectivity.
+
+Authentication. The Ingest API uses per-tenant API keys passed in the
+`X-Northwind-Key` header. The Query API uses OAuth2 bearer tokens for
+dashboard users and personal access tokens for programmatic access; personal
+access tokens can be scoped to read-only or read-write and are managed from
+the tenant settings page.
+
+Error handling recommendations. All official SDKs implement exponential
+backoff with jitter for 429 and 5xx responses, capped at 5 retries. Events
+that fail after all retries are written to a local disk buffer (where
+supported) so they are not silently lost, and are retried on the next SDK
+flush cycle.

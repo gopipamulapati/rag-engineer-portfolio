@@ -1,0 +1,42 @@
+[
+  {
+    "question": "How many events per second can a tenant send by default before being rate limited?",
+    "expected_source": "api_rate_limits_and_sdks.txt",
+    "expected_keywords": ["5,000", "5000", "token bucket"]
+  },
+  {
+    "question": "Who declares an incident commander and when does a status page need to be updated during a SEV1?",
+    "expected_source": "incident_response_runbook.txt",
+    "expected_keywords": ["incident commander", "15 minutes", "status page"]
+  },
+  {
+    "question": "How long are raw events kept in Kafka before deletion?",
+    "expected_source": "data_retention_policy.txt",
+    "expected_keywords": ["7 days"]
+  },
+  {
+    "question": "What is the first task given to a new engineer during onboarding?",
+    "expected_source": "onboarding_guide.txt",
+    "expected_keywords": ["one-line change", "Query API", "deploy pipeline"]
+  },
+  {
+    "question": "Which database stores the rolled-up metrics and what technology performs the windowed aggregation?",
+    "expected_source": "architecture_overview.txt",
+    "expected_keywords": ["ClickHouse", "Flink"]
+  },
+  {
+    "question": "Is regional failover triggered automatically or manually, and why?",
+    "expected_source": "incident_response_runbook.txt",
+    "expected_keywords": ["manually", "split-brain"]
+  },
+  {
+    "question": "What backoff strategy do the official SDKs use for failed requests?",
+    "expected_source": "api_rate_limits_and_sdks.txt",
+    "expected_keywords": ["exponential backoff", "jitter"]
+  },
+  {
+    "question": "How long must a new engineer shadow on-call before joining the primary rotation?",
+    "expected_source": "onboarding_guide.txt",
+    "expected_keywords": ["one week", "shadow"]
+  }
+]

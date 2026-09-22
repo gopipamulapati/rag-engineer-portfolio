@@ -1,0 +1,38 @@
+Northwind Analytics — System Architecture Overview
+
+Northwind Analytics is a multi-tenant SaaS platform that ingests customer event
+data, aggregates it into dashboards, and exposes a query API. The system is
+composed of five core services: the Ingest Gateway, the Stream Processor, the
+Metrics Store, the Query API, and the Dashboard Frontend.
+
+The Ingest Gateway accepts event data over HTTPS from customer SDKs. It
+performs schema validation, request authentication using per-tenant API keys,
+and rate limiting (default: 5,000 events per second per tenant). Valid events
+are published to a Kafka topic partitioned by tenant ID, ensuring that a
+single noisy tenant cannot starve others of processing capacity.
+
+The Stream Processor consumes from Kafka using a set of horizontally scaled
+workers built on Apache Flink. It performs windowed aggregation (1-minute,
+1-hour, and 1-day tumbling windows), deduplicates events using an idempotency
+key, and writes rolled-up metrics into the Metrics Store, which is backed by
+ClickHouse for fast analytical queries.
+
+The Query API is a stateless Go service that translates dashboard requests
+into ClickHouse SQL, applies tenant-level row security, and caches frequent
+queries in Redis with a 60-second TTL. All Query API instances run behind an
+internal load balancer and are deployed across three availability zones for
+redundancy.
+
+The Dashboard Frontend is a React single-page application served from a CDN.
+It authenticates users via OAuth2 against the internal identity provider and
+communicates with the Query API over a private network path — it never talks
+to ClickHouse or Kafka directly.
+
+Data flows in one direction only: Ingest Gateway to Kafka to Stream Processor
+to Metrics Store to Query API to Dashboard Frontend. There is no synchronous
+path from the frontend back into the ingestion pipeline, which keeps read and
+write paths fully decoupled and independently scalable.
+
+The platform currently runs across two cloud regions, us-east-1 as primary
+and us-west-2 as a warm standby. Kafka topics are mirrored between regions
+using MirrorMaker 2, with a target replication lag of under 30 seconds.

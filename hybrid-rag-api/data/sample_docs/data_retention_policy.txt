@@ -1,0 +1,34 @@
+Northwind Analytics — Data Retention and Privacy Policy
+
+Raw event data. Raw events accepted by the Ingest Gateway are retained in
+Kafka for 7 days to support reprocessing after a Stream Processor failure,
+after which they are permanently deleted from the message log.
+
+Aggregated metrics. Minute-level rollups in the Metrics Store are retained
+for 30 days. Hour-level rollups are retained for 13 months to support
+year-over-year dashboard comparisons. Day-level rollups are retained
+indefinitely unless a tenant requests deletion.
+
+Tenant-requested deletion. When a tenant offboards or requests data deletion
+under a data processing agreement, Northwind Analytics deletes all raw
+events, rollups, and cached query results associated with that tenant's ID
+within 30 days, and confirms deletion in writing to the tenant's designated
+contact.
+
+Personally identifiable information. The Ingest Gateway rejects any event
+containing fields recognized as PII (email addresses, phone numbers, national
+ID numbers) via a pattern-matching filter, and rejected events are logged to
+a quarantine topic for customer notification rather than being silently
+dropped. Northwind Analytics does not intentionally store PII in the Metrics
+Store.
+
+Access controls. Access to raw Kafka topics is restricted to the Platform
+team. Access to per-tenant dashboards is restricted by row-level security in
+the Query API, keyed on the authenticated tenant ID from the OAuth2 token.
+Internal analysts querying ClickHouse directly for support purposes must go
+through a break-glass process that is logged and reviewed weekly.
+
+Backups. ClickHouse backups are taken every 6 hours and retained for 14 days
+in encrypted object storage. Backup restoration is tested quarterly as part
+of the disaster recovery exercise described in the incident response
+runbook.
