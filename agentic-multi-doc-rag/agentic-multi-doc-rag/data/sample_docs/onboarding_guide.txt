@@ -1,0 +1,33 @@
+Northwind Analytics — New Engineer Onboarding Guide
+
+Week one. New engineers on the Platform team get read access to all
+repositories, a sandbox tenant in the staging environment, and a pairing
+partner for their first two weeks. The first task is always the same: ship a
+one-line change to the Query API (such as adding a log field) through the
+full deploy pipeline, so the new engineer sees the CI/CD process, staging
+rollout, and production deploy approval flow firsthand.
+
+Local development. The full stack can be run locally using the provided
+docker-compose file, which starts a single-node Kafka broker, a ClickHouse
+instance, Redis, and the Go-based Query API. The Stream Processor is not
+included in the local stack by default because Flink's local mode is memory
+hungry; engineers working on stream processing changes run it via a separate
+`make flink-local` target.
+
+Deploy process. All services deploy via a GitOps pipeline: merging to main
+triggers a build, automated tests, and a staging deploy. Production deploys
+require a manual approval from a second engineer and are done during business
+hours only, except for security patches, which may be deployed at any time
+under the emergency change process.
+
+On-call readiness. New engineers join the on-call rotation only after
+completing an on-call shadow rotation, where they receive pages as a
+secondary but are not responsible for acknowledging them. This shadow period
+lasts at least one full rotation cycle (one week) and is signed off by the
+engineer's manager before they are added to the primary rotation described in
+the incident response runbook.
+
+Documentation. Engineers are expected to keep the architecture overview,
+runbooks, and this onboarding guide up to date as part of any change that
+affects them — documentation updates are reviewed in the same pull request as
+the code change, not as a follow-up task.

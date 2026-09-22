@@ -1,0 +1,26 @@
+[
+  {
+    "question": "How long does an engineer shadow on-call before joining the primary rotation, and how quickly must the on-call engineer acknowledge a page once they are on primary?",
+    "expected_sources": ["onboarding_guide.txt", "incident_response_runbook.txt"]
+  },
+  {
+    "question": "What is the default tenant rate limit on the ingest API, and how long is raw event data retained before deletion?",
+    "expected_sources": ["api_rate_limits_and_sdks.txt", "data_retention_policy.txt"]
+  },
+  {
+    "question": "Which database stores the rolled-up metrics, and how often are backups of it taken?",
+    "expected_sources": ["architecture_overview.txt", "data_retention_policy.txt"]
+  },
+  {
+    "question": "What are the two cloud regions the platform runs in, and why is regional failover triggered manually rather than automatically?",
+    "expected_sources": ["architecture_overview.txt", "incident_response_runbook.txt"]
+  },
+  {
+    "question": "What services run in the local docker-compose development stack, and how many days are ClickHouse backups retained for?",
+    "expected_sources": ["onboarding_guide.txt", "data_retention_policy.txt"]
+  },
+  {
+    "question": "How many requests per minute can a dashboard user make to the Query API, and which service enforces tenant-level row security?",
+    "expected_sources": ["api_rate_limits_and_sdks.txt", "architecture_overview.txt"]
+  }
+]
