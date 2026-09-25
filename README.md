@@ -18,7 +18,7 @@ LLM-generated answers and LLM-driven planning.
 |---|---|---|---|
 | 01 | [Hybrid Retrieval API](hybrid-rag-api) | BM25 + dense search, reciprocal rank fusion, cross-encoder reranking, Hit Rate@5 / MRR evaluation per stage, FastAPI | ✅ Complete |
 | 02 | [Agentic Multi-Document RAG](agentic-multi-doc-rag) | ReAct-style agent that decomposes multi-hop questions, searches across documents and returns a full reasoning trace; heuristic fallback without an API key | ✅ Complete |
-| 03 | Conversational RAG with memory | LangGraph state graph, session memory, streaming | 🛠 Planned |
+| 03 | [Conversational RAG with Memory](conversational-rag-langgraph) | LangGraph state graph with checkpointer memory (in-memory or SQLite), follow-up condensing, grounding self-check with retry, SSE streaming; eval shows follow-up answer hits 83% → 100% with memory | ✅ Complete |
 | 04 | LLM-as-judge evaluation and guardrails | Faithfulness / relevance scoring, PII and prompt-injection detection | 🛠 Planned |
 
 ### 01: Hybrid Retrieval API
@@ -32,12 +32,20 @@ searches to run, executes them through the same hybrid + rerank pipeline as proj
 returns the answer with sources and a step-by-step trace. With an API key, an LLM plans
 dynamically (ReAct loop). Without one, a rule-based decomposer runs, so it's always demoable.
 
+### 03: Conversational RAG with Memory
+A multi-turn chat service built on LangGraph and LangChain. A checkpointer keeps each
+session's history, follow-ups like "How long are *they* retained?" are rewritten into
+standalone queries, and every answer is checked against the retrieved context before it's
+returned. It's retried with a broader query or declined if it isn't grounded. Answers stream
+over server-sent events, and an evaluation script measures follow-up accuracy with and
+without memory.
+
 ## Running a project
 
 ```bash
-cd hybrid-rag-api            # or agentic-multi-doc-rag
+cd hybrid-rag-api            # or agentic-multi-doc-rag / conversational-rag-langgraph
 pip install -r requirements.txt
-python scripts/ingest.py     # build the index
+python scripts/ingest.py     # projects 01 and 02 only: build the index
 uvicorn app.main:app --reload
 pytest -q
 ```
