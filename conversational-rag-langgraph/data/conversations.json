@@ -1,0 +1,32 @@
+[
+  {"id": "retention", "turns": [
+    {"question": "How long is raw event data retained?", "source": "data_retention_policy.txt", "expect": "7 days"},
+    {"question": "What about hour-level rollups?", "source": "data_retention_policy.txt", "expect": "13 months"},
+    {"question": "And minute-level ones?", "source": "data_retention_policy.txt", "expect": "30 days"}
+  ]},
+  {"id": "on-call", "turns": [
+    {"question": "How does the on-call rotation work for the Platform team?", "source": "incident_response_runbook.txt", "expect": "weekly"},
+    {"question": "When is it handed off?", "source": "incident_response_runbook.txt", "expect": "Monday"},
+    {"question": "Who does it escalate to after 15 minutes?", "source": "incident_response_runbook.txt", "expect": "engineering manager"}
+  ]},
+  {"id": "query-api", "turns": [
+    {"question": "How does the Query API handle dashboard requests?", "source": "architecture_overview.txt", "expect": "ClickHouse SQL"},
+    {"question": "How long does it cache them?", "source": "architecture_overview.txt", "expect": "60-second"},
+    {"question": "Where is it deployed?", "source": "architecture_overview.txt", "expect": "three availability zones"}
+  ]},
+  {"id": "rate-limits", "turns": [
+    {"question": "What is the default ingest rate limit per tenant?", "source": "api_rate_limits_and_sdks.txt", "expect": "5,000"},
+    {"question": "Can enterprise tenants raise it?", "source": "api_rate_limits_and_sdks.txt", "expect": "50,000"},
+    {"question": "How long until the new one takes effect?", "source": "api_rate_limits_and_sdks.txt", "expect": "one business day"}
+  ]},
+  {"id": "failover", "turns": [
+    {"question": "How is regional failover triggered?", "source": "incident_response_runbook.txt", "expect": "manually"},
+    {"question": "Why isn't it automatic?", "source": "incident_response_runbook.txt", "expect": "split-brain"},
+    {"question": "How long does it typically take?", "source": "incident_response_runbook.txt", "expect": "10 minutes"}
+  ]},
+  {"id": "backups", "turns": [
+    {"question": "How often are ClickHouse backups taken?", "source": "data_retention_policy.txt", "expect": "6 hours"},
+    {"question": "How long are they retained?", "source": "data_retention_policy.txt", "expect": "14 days"},
+    {"question": "How is restoring them tested?", "source": "data_retention_policy.txt", "expect": "quarterly"}
+  ]}
+]
