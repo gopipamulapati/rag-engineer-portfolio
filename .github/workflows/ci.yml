@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: [hybrid-rag-api, agentic-multi-doc-rag]
+        project: [hybrid-rag-api, agentic-multi-doc-rag, conversational-rag-langgraph]
     defaults:
       run:
         working-directory: ${{ matrix.project }}
