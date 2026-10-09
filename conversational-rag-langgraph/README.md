@@ -7,6 +7,8 @@ context before returning it, and streams progress and tokens over server-sent ev
 
 Project 03 of the [RAG Engineer Portfolio](../README.md).
 
+![Four-turn session: follow-ups resolved from memory, off-topic question declined](docs/images/demo.png)
+
 ## The problem this solves
 
 Single-turn RAG breaks as soon as a user asks a follow-up:
@@ -24,19 +26,7 @@ rewrites each follow-up into a standalone query before retrieval:
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    S([START]) --> C[condense<br/>follow-up to standalone query]
-    C --> R[retrieve<br/>BM25 top-k]
-    R --> G[generate<br/>cited answer]
-    G --> K{self_check<br/>grounded?}
-    K -->|yes| F[finalize<br/>append to history]
-    K -->|no, retry with broader query| R
-    K -->|still no| D[decline<br/>no supported answer]
-    D --> F
-    F --> E([END])
-    M[(Checkpointer<br/>InMemorySaver / SqliteSaver)] -. session state by thread_id .- C
-```
+![Architecture: condense, retrieve, generate, self-check with retry or decline, finalize, with checkpointer memory](docs/images/architecture.png)
 
 | Node | LLM mode (`OPENAI_API_KEY` set) | Heuristic mode (default, no key) |
 |---|---|---|
@@ -117,6 +107,8 @@ curl -X POST localhost:8000/chat -H "content-type: application/json" \
 | `GET /sessions/{id}/history` | Full conversation for a session |
 | `DELETE /sessions/{id}` | Forget a session |
 | `GET /health` | Mode (llm / heuristic) and memory backend |
+
+![Interactive API docs (FastAPI / Swagger UI)](docs/images/api-docs.png)
 
 ## Tests
 
